@@ -9,6 +9,7 @@ import { Avatar } from '@mui/material';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
+import axios from 'axios';
 
 const style = {
     position: 'absolute',
@@ -58,7 +59,24 @@ export default function SearchAppBar({isLoggedIn}) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [video, setVideo] = React.useState("");
+    const [cover, setCover] = React.useState("");
+    const [title, setTitle] = React.useState("")
 
+
+    const submitForm = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("video", video);
+        formData.append("cover", cover);
+        const token = localStorage.getItem('token');
+        await axios.post("http://localhost:3002/api/v1/video", formData, {
+            headers: ({
+                Authorization: 'Bearer ' + token
+            })
+        })
+    }
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -91,7 +109,7 @@ export default function SearchAppBar({isLoggedIn}) {
                                 >
                                     <Box sx={style}>
                                         <Typography id="modal-modal-title" variant="h6" component="h2">
-                                            <Box component="form" noValidate sx={{ mt: 1 }}>
+                                            <Box component="form" onSubmit={submitForm} noValidate sx={{ mt: 1 }}>
                                                 <label>Video Title:</label>
                                                 <TextField
                                                     margin="normal"
@@ -100,7 +118,7 @@ export default function SearchAppBar({isLoggedIn}) {
                                                     id="title"
                                                     name="title"
                                                     autoFocus
-                                                
+                                                    onChange={(e) => setTitle(e.target.value)}
                                                 />
                                                 <label>Select Video:</label>
                                                 <TextField
@@ -111,7 +129,7 @@ export default function SearchAppBar({isLoggedIn}) {
                                                     name="video"
                                                     autoFocus
                                                     type="file"
-                                                    
+                                                    onChange={(e) => setVideo(e.target.files[0])}
                                                 />
                                                 <label>Select Cover Image:</label>
                                                 <TextField
@@ -122,7 +140,7 @@ export default function SearchAppBar({isLoggedIn}) {
                                                     name="coverImage"
                                                     type="file"
                                                     id="coverImage"
-                                                    
+                                                    onChange={(e) => setCover(e.target.files[0])}
                                                 />
                                                 <Button
                                                     type="submit"
