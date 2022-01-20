@@ -9,12 +9,33 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom"
 
 const theme = createTheme();
 
-export default function SignIn() {
-  // Handler function goes here!
+export default function SignIn(props) {
+  const { setIsLoggedIn } = props
+  const [errrorMessage, setErrorMessage] = React.useState('')
+  let navigate = useNavigate();
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const form = {
+      email: formData.get('email'),
+      password: formData.get('password')
+    };
+    const { data } = await axios.post("http://localhost:3002/api/v1/user/signin", form);
+    if (data.status === parseInt('401')) {
+      setErrorMessage(data.response)
+    } else {
+      localStorage.setItem('token', data.token);
+      setIsLoggedIn(true)
+      navigate('/video')
+    }
+
+  };
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -27,11 +48,13 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}></Avatar>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+
+          </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -53,7 +76,7 @@ export default function SignIn() {
               autoComplete="current-password"
             />
             <Typography component="p" variant="p" color="red">
-             {/* Error message goes here! */}
+              {errrorMessage}
             </Typography>
             <Button
               type="submit"
@@ -65,7 +88,7 @@ export default function SignIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="/Signup" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
