@@ -26,13 +26,13 @@ export default function SignIn(props) {
       email: formData.get('email'),
       password: formData.get('password')
     };
-    const { data } = await axios.post("http://localhost:3002/api/v1/user/signin", form);
+    const { data } = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/v1/user/signin`, form);
     if (data.status === parseInt('401')) {
       setErrorMessage(data.response)
     } else {
       localStorage.setItem('token', data.token);
       setIsLoggedIn(true)
-      navigate('/video')
+      navigate('/')
     }
 
   };
@@ -88,12 +88,12 @@ export default function SignIn(props) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="/Signup" variant="body2">
+                <Link to="/Signup" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="SignUp" variant="body2">
+                <Link to="/SignUp" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
