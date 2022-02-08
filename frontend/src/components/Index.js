@@ -12,28 +12,27 @@ import {
 
 
 export default function Index(props) {
-    const { isLoggedIn, setLoggedIn } = props
+    const { isLoggedIn, setIsLoggedIn } = props
     return (
         <div>
             <Header isLoggedIn={isLoggedIn} />
             <BrowserRouter>
                 {isLoggedIn ?
                     <Routes>
-                        <Route path="/video" element={<VideoList setLoggedIn={setLoggedIn}/>}>
+                        <Route path="/video" element={<VideoList setLoggedIn={setIsLoggedIn}/>}>
                         </Route>
-                        <Route path="/video/:id" element={<Video setLoggedIn={setLoggedIn}/>}>
+                        <Route path="/video/:id" element={<Video setLoggedIn={setIsLoggedIn}/>}>
                         </Route>
                     </Routes>
                     :
                     <Routes>
-                        <Route path="/" element={<SignIn setIsLoggedIn={setLoggedIn} isLoggedIn={isLoggedIn} />}>
+                        <Route path="/" element={<SignIn setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />}>
                         </Route>
-                        <Route path="/signup" element={<SignUp setIsLoggedIn={setLoggedIn} />}>
+                        <Route path="/signup" element={<SignUp setIsLoggedIn={setIsLoggedIn} />}>
                         </Route>
                     </Routes>
                 }
             </BrowserRouter>
         </div>
-
     )
 }
