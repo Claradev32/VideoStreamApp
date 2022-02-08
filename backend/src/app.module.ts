@@ -1,6 +1,4 @@
 import { Module, RequestMethod, MiddlewareConsumer } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -40,11 +38,12 @@ dotenv.config();
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
+      exclude: ['/api/v1*'],
     }),
   ],
 
-  controllers: [AppController, VideoController, UserController],
-  providers: [AppService, VideoService, UserService],
+  controllers: [VideoController, UserController],
+  providers: [VideoService, UserService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

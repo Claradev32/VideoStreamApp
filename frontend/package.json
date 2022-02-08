@@ -23,8 +23,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "cross-env BUILD_PATH=../backend/public react-scripts build",
-    "test": "react-scripts test"
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "postbuild": "shx cp -r \"./build/*\" \"../backend/public\""
   },
   "eslintConfig": {
     "extends": [
@@ -45,6 +46,6 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "^7.0.3"
+    "shx": "^0.3.4"
   }
 }

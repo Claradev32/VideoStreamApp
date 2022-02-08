@@ -2,7 +2,8 @@ import { useState } from "react";
 import Index from "./components/Index";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn ] = useState(false);
+    const token = localStorage.getItem('token');
+  const [isLoggedIn, setIsLoggedIn ] = useState(token !== undefined);
 
   return (
     <>
